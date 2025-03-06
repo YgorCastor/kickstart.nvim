@@ -4,13 +4,21 @@ return {
     dependencies = {
       'nvim-tree/nvim-web-devicons',
     },
+    lazy = true,
+    event = 'VeryLazy',
     keys = {
-      { '<leader>H', function() require('arrow.ui').toggle_quick_menu() end, desc = 'Arrow Toggle' },
+      {
+        '<leader>H',
+        function()
+          require('arrow.ui').toggle_quick_menu()
+        end,
+        desc = 'Arrow Toggle',
+      },
     },
     opts = {
       show_icons = true,
       leader_key = '<leader>H', -- We're setting this to match our keybinding
-      buffer_leader_key = 'm',  -- Per Buffer Mappings
+      buffer_leader_key = 'm', -- Per Buffer Mappings
       separate_by_branch = true,
       hide_handbook = false,
     },
@@ -56,7 +64,7 @@ return {
       },
 
       spec = {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -81,7 +89,7 @@ return {
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       require('telescope').setup {
@@ -103,26 +111,29 @@ return {
       vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
       vim.keymap.set('n', '<leader>fr', builtin.oldfiles, { desc = '[F]ind [R]ecent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader>fb', function()
-        builtin.buffers({
+        builtin.buffers {
           attach_mappings = function(_, map)
             -- Add a mapping to delete the selected buffer
             map('i', '<c-d>', function(prompt_bufnr)
-              local actions = require('telescope.actions')
-              local action_state = require('telescope.actions.state')
+              local actions = require 'telescope.actions'
+              local action_state = require 'telescope.actions.state'
 
               -- Get the current selection
               local selection = action_state.get_selected_entry()
-              if not selection then return end
-
-              -- Close the telescope window first
-              actions.close(prompt_bufnr)
+              if not selection then
+                return
+              end
 
               -- Delete the selected buffer
               vim.api.nvim_buf_delete(selection.bufnr, { force = false })
+
+              -- Refresh the buffer list to reflect the changes
+              actions.close(prompt_bufnr)
+              require('telescope.builtin').buffers()
             end)
             return true
-          end
-        })
+          end,
+        }
       end, { desc = '[F]ind [B]uffers (Ctrl-d to delete)' })
       vim.keymap.set('n', '<leader><leader>', builtin.live_grep, { desc = 'Search in all files' })
 
@@ -183,6 +194,7 @@ return {
   {
     'MagicDuck/grug-far.nvim',
     opts = { headerMaxWidth = 80 },
+    event = 'VeryLazy',
     cmd = 'GrugFar',
     keys = {
       {
@@ -256,7 +268,7 @@ return {
     event = 'VeryLazy',
     enabled = vim.fn.has 'nvim-0.10.0' == 1,
   },
-  { 'echasnovski/mini.ai',      version = '*' },
+  { 'echasnovski/mini.ai', version = '*' },
   {
     'folke/lazydev.nvim',
     ft = 'lua', -- only load on lua files
@@ -358,38 +370,69 @@ return {
     end,
   },
   {
-    "gbprod/yanky.nvim",
+    'gbprod/yanky.nvim',
     dependencies = {
-      { "kkharji/sqlite.lua" }
+      { 'kkharji/sqlite.lua' },
     },
     opts = {
-      ring = { storage = "sqlite" },
+      ring = { storage = 'sqlite' },
     },
     keys = {
-      { "<leader>p", function() require("telescope").extensions.yank_history.yank_history({}) end, desc = "Open Yank History" },
-      { "y",         "<Plug>(YankyYank)",                                                          mode = { "n", "x" },                                desc = "Yank text" },
-      { "p",         "<Plug>(YankyPutAfter)",                                                      mode = { "n", "x" },                                desc = "Put yanked text after cursor" },
-      { "P",         "<Plug>(YankyPutBefore)",                                                     mode = { "n", "x" },                                desc = "Put yanked text before cursor" },
-      { "gp",        "<Plug>(YankyGPutAfter)",                                                     mode = { "n", "x" },                                desc = "Put yanked text after selection" },
-      { "gP",        "<Plug>(YankyGPutBefore)",                                                    mode = { "n", "x" },                                desc = "Put yanked text before selection" },
-      { "<c-p>",     "<Plug>(YankyPreviousEntry)",                                                 desc = "Select previous entry through yank history" },
-      { "<c-n>",     "<Plug>(YankyNextEntry)",                                                     desc = "Select next entry through yank history" },
-      { "]p",        "<Plug>(YankyPutIndentAfterLinewise)",                                        desc = "Put indented after cursor (linewise)" },
-      { "[p",        "<Plug>(YankyPutIndentBeforeLinewise)",                                       desc = "Put indented before cursor (linewise)" },
-      { "]P",        "<Plug>(YankyPutIndentAfterLinewise)",                                        desc = "Put indented after cursor (linewise)" },
-      { "[P",        "<Plug>(YankyPutIndentBeforeLinewise)",                                       desc = "Put indented before cursor (linewise)" },
-      { ">p",        "<Plug>(YankyPutIndentAfterShiftRight)",                                      desc = "Put and indent right" },
-      { "<p",        "<Plug>(YankyPutIndentAfterShiftLeft)",                                       desc = "Put and indent left" },
-      { ">P",        "<Plug>(YankyPutIndentBeforeShiftRight)",                                     desc = "Put before and indent right" },
-      { "<P",        "<Plug>(YankyPutIndentBeforeShiftLeft)",                                      desc = "Put before and indent left" },
-      { "=p",        "<Plug>(YankyPutAfterFilter)",                                                desc = "Put after applying a filter" },
-      { "=P",        "<Plug>(YankyPutBeforeFilter)",                                               desc = "Put before applying a filter" },
+      {
+        '<leader>p',
+        function()
+          require('telescope').extensions.yank_history.yank_history {}
+        end,
+        desc = 'Open Yank History',
+      },
+      {
+        'y',
+        '<Plug>(YankyYank)',
+        mode = { 'n', 'x' },
+        desc = 'Yank text',
+      },
+      {
+        'p',
+        '<Plug>(YankyPutAfter)',
+        mode = { 'n', 'x' },
+        desc = 'Put yanked text after cursor',
+      },
+      {
+        'P',
+        '<Plug>(YankyPutBefore)',
+        mode = { 'n', 'x' },
+        desc = 'Put yanked text before cursor',
+      },
+      {
+        'gp',
+        '<Plug>(YankyGPutAfter)',
+        mode = { 'n', 'x' },
+        desc = 'Put yanked text after selection',
+      },
+      {
+        'gP',
+        '<Plug>(YankyGPutBefore)',
+        mode = { 'n', 'x' },
+        desc = 'Put yanked text before selection',
+      },
+      { '<c-p>', '<Plug>(YankyPreviousEntry)', desc = 'Select previous entry through yank history' },
+      { '<c-n>', '<Plug>(YankyNextEntry)', desc = 'Select next entry through yank history' },
+      { ']p', '<Plug>(YankyPutIndentAfterLinewise)', desc = 'Put indented after cursor (linewise)' },
+      { '[p', '<Plug>(YankyPutIndentBeforeLinewise)', desc = 'Put indented before cursor (linewise)' },
+      { ']P', '<Plug>(YankyPutIndentAfterLinewise)', desc = 'Put indented after cursor (linewise)' },
+      { '[P', '<Plug>(YankyPutIndentBeforeLinewise)', desc = 'Put indented before cursor (linewise)' },
+      { '>p', '<Plug>(YankyPutIndentAfterShiftRight)', desc = 'Put and indent right' },
+      { '<p', '<Plug>(YankyPutIndentAfterShiftLeft)', desc = 'Put and indent left' },
+      { '>P', '<Plug>(YankyPutIndentBeforeShiftRight)', desc = 'Put before and indent right' },
+      { '<P', '<Plug>(YankyPutIndentBeforeShiftLeft)', desc = 'Put before and indent left' },
+      { '=p', '<Plug>(YankyPutAfterFilter)', desc = 'Put after applying a filter' },
+      { '=P', '<Plug>(YankyPutBeforeFilter)', desc = 'Put before applying a filter' },
     },
   },
   {
-    "natecraddock/workspaces.nvim",
+    'natecraddock/workspaces.nvim',
     config = function()
-      require("workspaces").setup()
+      require('workspaces').setup()
     end,
   },
 }
