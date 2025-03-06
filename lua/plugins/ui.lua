@@ -201,4 +201,8 @@ return {
       require("lsp-lens").setup({})
     end,
   },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false
+  },
 }
