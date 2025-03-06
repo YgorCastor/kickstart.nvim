@@ -5,6 +5,7 @@ return {
     opts = {
       library = {
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        'nvim-dap-ui',
       },
     },
   },
@@ -39,13 +40,13 @@ return {
       end,
       formatters = {
         mix = {
-          command = "mix",
-          args = { "format", "-" },
+          command = 'mix',
+          args = { 'format', '-' },
           cwd = function(ctx)
             -- Find the root directory containing mix.exs
-            local file = vim.fn.findfile("mix.exs", vim.fn.expand("%:p:h") .. ";")
-            if file ~= "" then
-              return vim.fn.fnamemodify(file, ":h")
+            local file = vim.fn.findfile('mix.exs', vim.fn.expand '%:p:h' .. ';')
+            if file ~= '' then
+              return vim.fn.fnamemodify(file, ':h')
             end
             return nil
           end,
@@ -59,22 +60,22 @@ return {
     },
   },
   {
-    "zeioth/none-ls-autoload.nvim",
-    event = "BufEnter",
-    dependencies = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
+    'zeioth/none-ls-autoload.nvim',
+    event = 'BufEnter',
+    dependencies = { 'williamboman/mason.nvim', 'nvimtools/none-ls.nvim' },
     opts = {},
   },
   {
-    "nvimtools/none-ls.nvim",
+    'nvimtools/none-ls.nvim',
     opts = function(_, opts)
       opts.sources = vim.list_extend(opts.sources or {}, {})
     end,
   },
   {
-    "zbirenbaum/copilot-cmp",
+    'zbirenbaum/copilot-cmp',
     config = function()
-      require("copilot_cmp").setup()
-    end
+      require('copilot_cmp').setup()
+    end,
   },
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -158,10 +159,10 @@ return {
             name = 'lazydev',
             group_index = 0,
           },
-          { name = "copilot",  group_index = 2 },
-          { name = "nvim_lsp", group_index = 2 },
-          { name = "path",     group_index = 2 },
-          { name = "luasnip",  group_index = 2 },
+          { name = 'copilot', group_index = 2 },
+          { name = 'nvim_lsp', group_index = 2 },
+          { name = 'path', group_index = 2 },
+          { name = 'luasnip', group_index = 2 },
         },
       }
     end,
@@ -171,7 +172,7 @@ return {
     dependencies = {
       { 'williamboman/mason.nvim', opts = {} },
       'williamboman/mason-lspconfig.nvim',
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
       'hrsh7th/cmp-nvim-lsp',
     },
     config = function()
@@ -285,12 +286,12 @@ return {
       },
     },
     keys = {
-      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>',              desc = 'Diagnostics (Trouble)' },
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics (Trouble)' },
       { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
-      { '<leader>cs', '<cmd>Trouble symbols toggle<cr>',                  desc = 'Symbols (Trouble)' },
-      { '<leader>cS', '<cmd>Trouble lsp toggle<cr>',                      desc = 'LSP references/definitions/... (Trouble)' },
-      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>',                  desc = 'Location List (Trouble)' },
-      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>',                   desc = 'Quickfix List (Trouble)' },
+      { '<leader>cs', '<cmd>Trouble symbols toggle<cr>', desc = 'Symbols (Trouble)' },
+      { '<leader>cS', '<cmd>Trouble lsp toggle<cr>', desc = 'LSP references/definitions/... (Trouble)' },
+      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>', desc = 'Location List (Trouble)' },
+      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix List (Trouble)' },
       {
         '[q',
         function()
@@ -321,4 +322,5 @@ return {
       },
     },
   },
+  -- nvim-dap-ui is now configured in lua/plugins/debug.lua
 }
