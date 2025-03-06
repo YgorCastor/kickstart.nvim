@@ -234,7 +234,10 @@ return {
         dockerls = {},
         erlangls = {},
         graphql = {},
+        gopls = {},
+        eslint = {},
         helm_ls = {},
+        hls = {},
         jsonls = {},
         lexical = {
           on_attach = function(client, bufnr)
@@ -253,9 +256,12 @@ return {
           },
         },
         marksman = {},
+        pyright = {},
+        ruff = {},
+        rust_analyzer = {},
+        svelte = {},
         terraformls = {},
         ts_ls = {},
-        rust_analyzer = {},
         yamlls = {},
         zls = {},
       }
@@ -322,5 +328,4 @@ return {
       },
     },
   },
-  -- nvim-dap-ui is now configured in lua/plugins/debug.lua
 }
