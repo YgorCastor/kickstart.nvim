@@ -1,8 +1,8 @@
 return {
-  { 'kdheepak/monochrome.nvim', lazy = true, priority = 1001 },
+  { 'kdheepak/monochrome.nvim', lazy = false, priority = 1001 },
   {
     '0xstepit/flow.nvim',
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {},
   },
@@ -39,6 +39,7 @@ return {
   {
     'zaldih/themery.nvim',
     lazy = false,
+    cmd = { 'Themery' },
     config = function()
       require('themery').setup {
         themes = {

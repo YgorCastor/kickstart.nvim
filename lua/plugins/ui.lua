@@ -140,7 +140,8 @@ return {
   },
   {
     'olimorris/persisted.nvim',
-    lazy = false, -- make sure the plugin is always loaded at startup
+    lazy = true,
+    cmd = { 'SessionLoad', 'SessionSave', 'SessionDelete' },
     keys = {
       { '<leader>ps', '<cmd>Telescope persisted<cr>', desc = 'Sessions' },
     },
@@ -214,12 +215,14 @@ return {
   },
   {
     'OXY2DEV/markview.nvim',
-    lazy = false,
+    lazy = true,
+    cmd = { 'MarkviewOpen', 'MarkviewToggle' },
   },
   {
     'folke/snacks.nvim',
     priority = 1000,
-    lazy = false,
+    lazy = true,
+    event = "VimEnter",
     ---@type snacks.Config
     opts = {
       animate = { enabled = true },
@@ -229,6 +232,8 @@ return {
   },
   {
     'folke/snacks.nvim',
+    lazy = true,
+    event = "VimEnter",
     ---@type snacks.Config
     opts = {
 
