@@ -121,6 +121,7 @@ The leader key is set to `<Space>`.
 ## 🎨 Themes
 
 This configuration includes several themes:
+
 - Flow
 - Monochrome
 - Melange

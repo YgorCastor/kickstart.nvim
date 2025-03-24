@@ -19,19 +19,21 @@ return {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      }
-    end,
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+      filetypes = {
+        markdown = true,
+        help = true,
+      },
+    },
   },
   {
     'folke/which-key.nvim',
     opts = {
       spec = {
-        { '<leader>Ais',  desc = 'Open aider with Sonnet',   mode = 'n' },
-        { '<leader>Aio3', desc = 'Open aider with o3-mini',  mode = 'n' },
+        { '<leader>Ais', desc = 'Open aider with Sonnet', mode = 'n' },
+        { '<leader>Aio3', desc = 'Open aider with o3-mini', mode = 'n' },
         { '<leader>Aids', desc = 'Open aider with deepseek', mode = 'n' },
       },
     },
