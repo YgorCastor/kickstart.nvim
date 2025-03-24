@@ -167,9 +167,11 @@ return {
       ensure_installed = {
         'bash',
         'c',
+        'css',
         'diff',
         'elixir',
         'erlang',
+        'helm',
         'html',
         'kotlin',
         'lua',
@@ -180,6 +182,7 @@ return {
         'rust',
         'vim',
         'vimdoc',
+        'yaml',
       },
       auto_install = true,
       highlight = {

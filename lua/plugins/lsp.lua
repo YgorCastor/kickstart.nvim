@@ -264,7 +264,6 @@ return {
         svelte = {},
         terraformls = {},
         ts_ls = {},
-        yamlls = {},
         zls = {},
       }
 
