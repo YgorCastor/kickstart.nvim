@@ -11,7 +11,7 @@ return {
       require('aider').setup {
         vim.api.nvim_set_keymap('n', '<leader>Ais', ':AiderOpen --model sonnet --subtree-only --cache-prompts<CR>', { noremap = true, silent = true }),
         vim.api.nvim_set_keymap('n', '<leader>Aio3', ':AiderOpen --model o3-mini --subtree-only --cache-prompts<CR>', { noremap = true, silent = true }),
-        vim.api.nvim_set_keymap('n', '<leader>Aids', ':AiderOpen --model deepseek --subtree-only --cache-prompts<CR>', { noremap = true, silent = true }),
+        vim.api.nvim_set_keymap('n', '<leader>Aig', ':AiderOpen --model  gemini-2.5-pro --subtree-only<CR>', { noremap = true, silent = true }),
       }
     end,
   },
@@ -32,9 +32,9 @@ return {
     'folke/which-key.nvim',
     opts = {
       spec = {
-        { '<leader>Ais', desc = 'Open aider with Sonnet', mode = 'n' },
+        { '<leader>Ais',  desc = 'Open aider with Sonnet',  mode = 'n' },
         { '<leader>Aio3', desc = 'Open aider with o3-mini', mode = 'n' },
-        { '<leader>Aids', desc = 'Open aider with deepseek', mode = 'n' },
+        { '<leader>Aig',  desc = 'Open aider with gemini',  mode = 'n' },
       },
     },
   },

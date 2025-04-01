@@ -71,9 +71,9 @@ return {
       opts.sources = vim.list_extend(opts.sources or {}, {})
     end,
   },
-  { -- Autocompletion
+  {                                   -- Autocompletion
     'saghen/blink.cmp',
-    version = '*', -- use a release tag to download pre-built binaries
+    version = '*',                    -- use a release tag to download pre-built binaries
     dependencies = {
       'rafamadriz/friendly-snippets', -- optional: provides snippets for the snippet source
       'fang2hou/blink-copilot',
@@ -116,7 +116,7 @@ return {
     dependencies = {
       { 'williamboman/mason.nvim', opts = {} },
       'williamboman/mason-lspconfig.nvim',
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
       'saghen/blink.cmp',
     },
     config = function()
@@ -179,10 +179,14 @@ return {
         erlangls = {},
         graphql = {},
         gopls = {},
+        detekt = {},
         eslint = {},
         helm_ls = {},
-        hls = {},
+        java_language_server = {},
+        java_debug_adapter = {},
         jsonls = {},
+        kotlin_debug_adapter = {},
+        kotlin_language_server = {},
         lexical = {
           on_attach = function(client, bufnr)
             -- Disable Lexical’s formatting capabilities
@@ -235,12 +239,12 @@ return {
       },
     },
     keys = {
-      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics (Trouble)' },
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>',              desc = 'Diagnostics (Trouble)' },
       { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
-      { '<leader>cs', '<cmd>Trouble symbols toggle<cr>', desc = 'Symbols (Trouble)' },
-      { '<leader>cS', '<cmd>Trouble lsp toggle<cr>', desc = 'LSP references/definitions/... (Trouble)' },
-      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>', desc = 'Location List (Trouble)' },
-      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix List (Trouble)' },
+      { '<leader>cs', '<cmd>Trouble symbols toggle<cr>',                  desc = 'Symbols (Trouble)' },
+      { '<leader>cS', '<cmd>Trouble lsp toggle<cr>',                      desc = 'LSP references/definitions/... (Trouble)' },
+      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>',                  desc = 'Location List (Trouble)' },
+      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>',                   desc = 'Quickfix List (Trouble)' },
       {
         '[q',
         function()
