@@ -72,3 +72,13 @@ vim.api.nvim_create_autocmd('LspDetach', {
     end
   end,
 })
+
+-- Format Json with Spaces
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'json',
+  callback = function()
+    vim.bo.expandtab = true -- Use spaces instead of tabs
+    vim.bo.shiftwidth = 2   -- Number of spaces for indentation
+    vim.bo.tabstop = 2      -- Number of spaces per tab
+  end,
+})

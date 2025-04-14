@@ -180,6 +180,7 @@ return {
         graphql = {},
         gopls = {},
         eslint = {},
+        fixjson = {},
         helm_ls = {},
         java_language_server = {},
         jsonls = {},
