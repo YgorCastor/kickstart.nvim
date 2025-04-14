@@ -6,6 +6,12 @@ return {
     priority = 1000,
     opts = {},
   },
+  {
+    "wtfox/jellybeans.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   { 'savq/melange-nvim' },
   { 'phha/zenburn.nvim' },
   {
@@ -45,6 +51,7 @@ return {
         themes = {
           'catppuccin',
           'flow',
+          'jellybeans',
           'monochrome',
           'melange',
           'zenburn',

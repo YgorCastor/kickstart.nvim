@@ -91,7 +91,7 @@ return {
     config = function()
       vim.o.hidden = true
       require('nvim-terminal').setup {
-        toggle_keymap = '<C-n>t',
+        toggle_keymap = '<leader>tt',
       }
     end,
   },
@@ -241,7 +241,7 @@ return {
         preset = {
           header = [[
     .---.
-   / 6 6 \ 
+   / 6 6 \
                             (   Y   )    .---------------------.
                              \  ~  /    |     CastorVim >_     |
                              /     \    |  [   ]         [   ] |
