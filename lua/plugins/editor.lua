@@ -160,6 +160,7 @@ return {
         'erlang',
         'helm',
         'html',
+        'json',
         'kotlin',
         'lua',
         'luadoc',
@@ -429,4 +430,8 @@ return {
       require('workspaces').setup()
     end,
   },
+  {
+    'stevearc/overseer.nvim',
+    opts = {},
+  }
 }

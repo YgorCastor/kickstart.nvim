@@ -135,6 +135,9 @@ return {
         adapters = {
           require 'neotest-elixir',
         },
+        consumers = {
+          overseer = require("neotest.consumers.overseer"),
+        },
       }
     end,
   },
