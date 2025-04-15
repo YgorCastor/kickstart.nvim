@@ -4,9 +4,9 @@ return {
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require("copilot").setup({
-        copilot_model = "gemini-2.5-pro",
-      })
+      require('copilot').setup {
+        copilot_model = 'gemini-2.5-pro',
+      }
     end,
     opts = {
       suggestion = { enabled = false },
@@ -23,34 +23,36 @@ return {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
     },
+    keys = {
+      { '<leader>ccc', '<cmd>CodeCompanionChat<cr>', desc = 'Start CodeCompanionChat' },
+      { '<leader>cce', '<cmd>CodeCompanion /explain<cr>', desc = 'Explain current snippet' },
+    },
     config = function()
       require('codecompanion').setup {
-        vim.api.nvim_set_keymap('n', '<leader>ccc', ':CodeCompanionChat<CR>', { noremap = true, silent = true }),
-        vim.api.nvim_set_keymap('n', '<leader>cce', ':CodeCompanion /explain<CR>', { noremap = true, silent = true }),
         adapters = {
           openai = function()
-            return require("codecompanion.adapters").extend("openai", {
+            return require('codecompanion.adapters').extend('openai', {
               schema = {
                 model = {
-                  default = "gpt-4.1",
+                  default = 'gpt-4.1',
                 },
               },
             })
           end,
           copilot = function()
-            return require("codecompanion.adapters").extend("copilot", {
+            return require('codecompanion.adapters').extend('copilot', {
               schema = {
                 model = {
-                  default = "gemini-2.5-pro",
+                  default = 'gemini-2.5-pro',
                 },
               },
             })
           end,
           anthropic = function()
-            return require("codecompanion.adapters").extend("anthropic", {
+            return require('codecompanion.adapters').extend('anthropic', {
               schema = {
                 model = {
-                  default = "clause-3.7-sonnet",
+                  default = 'clause-3.7-sonnet',
                 },
               },
             })
