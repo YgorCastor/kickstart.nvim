@@ -24,7 +24,7 @@ return {
       'nvim-treesitter/nvim-treesitter',
     },
     keys = {
-      { '<leader>ccc', '<cmd>CodeCompanionChat<cr>', desc = 'Start CodeCompanionChat' },
+      { '<leader>ccc', '<cmd>CodeCompanionChat<cr>',      desc = 'Start CodeCompanionChat' },
       { '<leader>cce', '<cmd>CodeCompanion /explain<cr>', desc = 'Explain current snippet' },
     },
     config = function()

@@ -56,6 +56,7 @@ return {
       formatters_by_ft = {
         lua = { 'stylua' },
         elixir = { 'mix' },
+        json = { 'prettier' },
       },
     },
   },
@@ -180,11 +181,9 @@ return {
         graphql = {},
         gopls = {},
         eslint = {},
-        fixjson = {},
         helm_ls = {},
         java_language_server = {},
         jsonls = {},
-        kotlin_debug_adapter = {},
         kotlin_language_server = {},
         lexical = {
           on_attach = function(client, bufnr)
