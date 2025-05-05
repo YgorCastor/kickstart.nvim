@@ -1,6 +1,9 @@
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
+--
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
@@ -8,15 +11,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     error('Error cloning lazy.nvim:\n' .. out)
   end
 end ---@diagnostic disable-next-line: undefined-field
+
 vim.opt.rtp:prepend(lazypath)
 
 -- Add support for the LazyFile event
-local lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
+local lazy_file_events = { 'BufReadPost', 'BufNewFile', 'BufWritePre' }
 
 -- Setup lazy file loading
-local Event = require("lazy.core.handler.event")
-Event.mappings.LazyFile = { id = "LazyFile", event = lazy_file_events }
-Event.mappings["User LazyFile"] = Event.mappings.LazyFile
+local Event = require 'lazy.core.handler.event'
+
+Event.mappings.LazyFile = { id = 'LazyFile', event = lazy_file_events }
+Event.mappings['User LazyFile'] = Event.mappings.LazyFile
 
 -- [[ Configure and install plugins ]]
 --
@@ -29,6 +34,7 @@ Event.mappings["User LazyFile"] = Event.mappings.LazyFile
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
+
 require('lazy').setup({
   'tpope/vim-sleuth',
   {
@@ -44,7 +50,7 @@ require('lazy').setup({
     },
   },
   { import = 'plugins' },
-  { import = 'plugins/langs' }
+  { import = 'plugins/langs' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -66,3 +72,6 @@ require('lazy').setup({
     },
   },
 })
+
+_G.Helpers = require 'config.helpers'
+_G.LspHelpers = require 'config.lsp_helpers'

@@ -48,4 +48,32 @@ return {
       })
     end,
   },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, { 'elixir', 'heex', 'eex' })
+      vim.treesitter.language.register('markdown', 'livebook')
+    end,
+  },
+  {
+    'neovim/nvim-lspconfig',
+    opts = {
+      servers = {
+        lexical = {
+          on_attach = function(client, bufnr)
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
+          end,
+        },
+      },
+    },
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    optional = true,
+    ft = function(_, ft)
+      vim.list_extend(ft, { 'livebook' })
+    end,
+  },
 }

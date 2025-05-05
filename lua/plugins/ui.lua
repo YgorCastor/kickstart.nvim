@@ -228,6 +228,7 @@ return {
     event = 'VimEnter',
     ---@type snacks.Config
     opts = {
+      toggle = { enabled = true },
       animate = { enabled = true },
       dashboard = { enabled = true },
       input = { enabled = true },
@@ -266,7 +267,7 @@ return {
     },
   },
   {
-    "OXY2DEV/ui.nvim",
-    lazy = false
-  }
+    'OXY2DEV/ui.nvim',
+    lazy = false,
+  },
 }

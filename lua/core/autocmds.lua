@@ -1,9 +1,14 @@
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
+
+local function augroup(name)
+  return vim.api.nvim_create_augroup('castorvim_' .. name, { clear = true })
+end
+
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  group = augroup 'highlight_yank',
   callback = function()
     vim.highlight.on_yank()
   end,
@@ -11,24 +16,30 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 vim.api.nvim_create_autocmd({ 'FileType' }, {
   callback = function()
-    -- check if treesitter has parser
     if require('nvim-treesitter.parsers').has_parser() then
-      -- use treesitter folding
       vim.opt.foldmethod = 'expr'
       vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
     else
-      -- use alternative foldmethod
       vim.opt.foldmethod = 'syntax'
     end
   end,
 })
 
--- Auto-reload files when they change on disk
-vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
-  desc = 'Check if files have been modified outside of Neovim',
-  group = vim.api.nvim_create_augroup('checktime', { clear = true }),
+-- resize splits if window got resized
+vim.api.nvim_create_autocmd({ 'VimResized' }, {
+  group = augroup 'resize_splits',
   callback = function()
-    if vim.fn.mode() ~= 'c' then
+    local current_tab = vim.fn.tabpagenr()
+    vim.cmd 'tabdo wincmd ='
+    vim.cmd('tabnext ' .. current_tab)
+  end,
+})
+
+-- Check if we need to reload the file when it changed
+vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
+  group = augroup 'checktime',
+  callback = function()
+    if vim.o.buftype ~= 'nofile' then
       vim.cmd 'checktime'
     end
   end,
@@ -73,12 +84,58 @@ vim.api.nvim_create_autocmd('LspDetach', {
   end,
 })
 
--- Format Json with Spaces
+-- close some filetypes with <q>
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'json',
+  group = augroup 'close_with_q',
+  pattern = {
+    'PlenaryTestPopup',
+    'checkhealth',
+    'dbout',
+    'gitsigns-blame',
+    'grug-far',
+    'help',
+    'lspinfo',
+    'neotest-output',
+    'neotest-output-panel',
+    'neotest-summary',
+    'notify',
+    'qf',
+    'spectre_panel',
+    'startuptime',
+    'tsplayground',
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.schedule(function()
+      vim.keymap.set('n', 'q', function()
+        vim.cmd 'close'
+        pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+      end, {
+        buffer = event.buf,
+        silent = true,
+        desc = 'Quit buffer',
+      })
+    end)
+  end,
+})
+
+-- Fix conceallevel for json files
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+  group = augroup 'json_conceal',
+  pattern = { 'json', 'jsonc', 'json5' },
   callback = function()
-    vim.bo.expandtab = true -- Use spaces instead of tabs
-    vim.bo.shiftwidth = 2   -- Number of spaces for indentation
-    vim.bo.tabstop = 2      -- Number of spaces per tab
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+-- Auto create dir when saving a file, in case some intermediate directory does not exist
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  group = augroup 'auto_create_dir',
+  callback = function(event)
+    if event.match:match '^%w%w+:[\\/][\\/]' then
+      return
+    end
+    local file = vim.uv.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
   end,
 })
