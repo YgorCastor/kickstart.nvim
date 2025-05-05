@@ -270,4 +270,8 @@ return {
     'OXY2DEV/ui.nvim',
     lazy = false,
   },
+  {
+    'j-hui/fidget.nvim',
+    opts = {},
+  },
 }

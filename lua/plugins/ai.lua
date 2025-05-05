@@ -22,11 +22,15 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
+      'j-hui/fidget.nvim',
     },
     keys = {
       { '<leader>ccc', '<cmd>CodeCompanionChat<cr>', desc = 'Start CodeCompanionChat' },
       { '<leader>cce', '<cmd>CodeCompanion /explain<cr>', desc = 'Explain current snippet' },
     },
+    init = function()
+      require('plugins.ai.codecompanion_spinner'):init()
+    end,
     opts = {
       strategies = {
         chat = {
