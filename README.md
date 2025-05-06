@@ -54,28 +54,6 @@ nvim
 
 On first launch, the configuration will automatically install lazy.nvim and all plugins.
 
-## 🗂️ Structure
-
-```
-~/.config/nvim/
-├── init.lua                 # Entry point
-├── lua/
-│   ├── config/              # Configuration for plugin managers
-│   │   └── lazy_setup.lua   # Lazy.nvim setup
-│   ├── core/                # Core configuration
-│   │   ├── autocmds.lua     # Autocommands
-│   │   ├── keymaps.lua      # Key mappings
-│   │   ├── options.lua      # Neovim options
-│   │   └── ui.lua           # UI settings
-│   └── plugins/             # Plugin configurations
-│       ├── ai.lua           # AI tools (Aider, Copilot, CodeCompanion)
-│       ├── editor.lua       # Editor enhancements (Telescope, Treesitter, etc.)
-│       ├── langs.lua        # Language support (Elixir, etc.)
-│       ├── lsp.lua          # LSP configuration
-│       ├── themes.lua       # Color schemes
-│       └── ui.lua           # UI plugins
-```
-
 ## ⌨️ Key Mappings
 
 The leader key is set to `<Space>`.
@@ -102,12 +80,6 @@ The leader key is set to `<Space>`.
 - `<leader>fb` - Buffers
 - `<leader><leader>` - Live grep (search in all files)
 - `<leader>/` - Search in current buffer
-
-### AI Tools
-
-- `<leader>Ais` - Open Aider with Sonnet
-- `<leader>Aio3` - Open Aider with o3-mini
-- `<leader>Aids` - Open Aider with Deepseek
 
 ### Formatting
 

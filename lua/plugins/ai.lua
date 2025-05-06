@@ -94,6 +94,21 @@ return {
             },
           })
         end,
+        huggingface = function()
+          return require('codecompanion.adapters').extend('huggingface', {
+            env = {
+              api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/huggingface_key.gpg 2>/dev/null',
+            },
+            schema = {
+              model = {
+                default = 'Qwen/Qwen3-235B-A22B',
+                choices = {
+                  'Qwen/Qwen3-235B-A22B',
+                },
+              },
+            },
+          })
+        end,
       },
       opts = {
         system_prompt = function(_)
@@ -108,46 +123,29 @@ return {
               When using markdown in assistant messages, use backticks to format file, directory, function, and class names. Use \\( and \\) for inline math, \\[ and \\] for block math.
             </communication>
 
-            <calling_tools>
-              All the tools are wrapped as a MCP, you **WILL** call them like this, else, the call **WILL** fail:
-               
-              ```Calling the get_file_contents tool:
-              arguments = '{"tool_name":"get_file_contents","server_name":"github.com/modelcontextprotocol/servers/tree/main/src/github","tool_input":{"repo":"snacks.nvim","owner":"folke","path":"lua/snacks/indent.lua"}}',
-              name = "use_mcp_tool"
-              ```
-            </calling_tools>
+            <knowledge_graph_memory_instructions>
+              ## Memory Retrieval:
+                Begin the interaction with "Remembering..."
+                Retrieve all relevant information about the specific coding project(s) being discussed from your memory.
 
-            <important_tools>
-              You will find several tools available to you via mcp, these are specially important:
+              ### Memory (Coding Project Focus):
 
-              * Context7: This tool provides up-to-date up-to-date documentation for LLMs and AI code editors, you should use it when you are unsure about functions signatures, libraries, or other code-related questions.
-              * Knowledge Graph Memory Server: A basic implementation of persistent memory using a local knowledge graph, you will use it like this:
-                <knowledge_graph_memory_instructions>
-                  ## Memory Retrieval:
-                    Begin the interaction with "Remembering..."
-                    Retrieve all relevant information about the specific coding project(s) being discussed from your memory.
+                During the conversation, actively listen for and capture new information related to the coding project, categorized as follows:
 
-                  ### Memory (Coding Project Focus):
+                a) Project Details: Project name, primary goal/purpose, main programming language(s), key frameworks/libraries, target platform(s) (e.g., web, mobile, desktop), version control system (e.g., Git, SVN), repository URL.
+                b) Team & Roles: Names of team members, their specific roles (e.g., Project Manager, Lead Developer, Backend Engineer, Frontend Developer, UI/UX Designer, QA Tester), key stakeholders.
+                c) Technical Specifications: High-level architecture, database choice and schema outline, main API endpoints/contracts, specific algorithms or complex logic employed, significant technical constraints or requirements.
+                d) Development Practices: Development methodology (e.g., Agile, Scrum, Kanban, Waterfall), testing strategies (unit, integration, E2E), CI/CD pipeline setup, deployment environment(s) and process.
+                e) Project Status & Roadmap: Current phase (e.g., planning, active development, testing, deployed, maintenance), upcoming milestones, release versions, deadlines, major features planned or in progress, known bugs or technical debt areas.
+                f) Dependencies & Integrations: Crucial external libraries, third-party APIs, managed services (e.g., AWS S3, Stripe, SendGrid), other internal systems the project interacts with.
 
-                    During the conversation, actively listen for and capture new information related to the coding project, categorized as follows:
+              ### Memory Update (Coding Project Focus):
+                If new project-related information falling into the categories above is gathered:
 
-                    a) Project Details: Project name, primary goal/purpose, main programming language(s), key frameworks/libraries, target platform(s) (e.g., web, mobile, desktop), version control system (e.g., Git, SVN), repository URL.
-                    b) Team & Roles: Names of team members, their specific roles (e.g., Project Manager, Lead Developer, Backend Engineer, Frontend Developer, UI/UX Designer, QA Tester), key stakeholders.
-                    c) Technical Specifications: High-level architecture, database choice and schema outline, main API endpoints/contracts, specific algorithms or complex logic employed, significant technical constraints or requirements.
-                    d) Development Practices: Development methodology (e.g., Agile, Scrum, Kanban, Waterfall), testing strategies (unit, integration, E2E), CI/CD pipeline setup, deployment environment(s) and process.
-                    e) Project Status & Roadmap: Current phase (e.g., planning, active development, testing, deployed, maintenance), upcoming milestones, release versions, deadlines, major features planned or in progress, known bugs or technical debt areas.
-                    f) Dependencies & Integrations: Crucial external libraries, third-party APIs, managed services (e.g., AWS S3, Stripe, SendGrid), other internal systems the project interacts with.
-
-                  ### Memory Update (Coding Project Focus):
-                    If new project-related information falling into the categories above is gathered:
-
-                    a) Create specific entities for the project itself, team members, key technologies (languages, frameworks, databases), significant components, external services, or major milestones/releases.
-                    b) Establish connections (relations) between these entities (e.g., Project_Alpha uses_language Python, Jane_Doe is_role Lead_Developer on_project Project_Alpha, Project_Alpha integrates_with Stripe_API).
-                    c) Store the specific facts about these entities and their relationships as observations within your memory.
-                </knowledge_graph_memory_instructions>
-
-                * Sequential Thinking: You should use this tool when you find complex problems that require breaking down into smaller steps. You can use it to help you think through the problem and come up with a plan of action. You can also use it to help you understand the user's request better and ask clarifying questions if needed.
-            </important_tools>
+                a) Create specific entities for the project itself, team members, key technologies (languages, frameworks, databases), significant components, external services, or major milestones/releases.
+                b) Establish connections (relations) between these entities (e.g., Project_Alpha uses_language Python, Jane_Doe is_role Lead_Developer on_project Project_Alpha, Project_Alpha integrates_with Stripe_API).
+                c) Store the specific facts about these entities and their relationships as observations within your memory.
+            </knowledge_graph_memory_instructions>
 
             <search_and_reading>
               If you are unsure about the answer to the USER's request or how to satiate their request, you should gather more information. This can be done with additional tool calls, asking clarifying questions, etc...
@@ -181,6 +179,8 @@ return {
             // ... existing code ...
             ```
             This is the ONLY acceptable format for code citations. The format is ```startLine:endLine:filepath where startLine and endLine are line numbers.
+
+            Before executing a tool/function, you will check if this tool needs to be executed through MCP, if so, you follow the Mcphub flow to execute the tool.
           ]]
         end,
       },
