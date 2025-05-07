@@ -224,7 +224,7 @@ return {
   {
     'folke/snacks.nvim',
     priority = 1000,
-    lazy = true,
+    lazy = false,
     event = 'VimEnter',
     ---@type snacks.Config
     opts = {
@@ -236,7 +236,7 @@ return {
   },
   {
     'folke/snacks.nvim',
-    lazy = true,
+    lazy = false,
     event = 'VimEnter',
     ---@type snacks.Config
     opts = {
