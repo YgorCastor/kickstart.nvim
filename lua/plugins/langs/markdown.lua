@@ -107,6 +107,7 @@ return {
   {
     'mfussenegger/nvim-lint',
     optional = true,
+    build = 'npm install -g markdownlint-cli2@latest',
     opts = {
       linters_by_ft = {
         markdown = { 'markdownlint-cli2' },
