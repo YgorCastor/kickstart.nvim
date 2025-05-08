@@ -4,21 +4,18 @@ return {
     '0xstepit/flow.nvim',
     lazy = false,
     priority = 1000,
-    opts = {},
   },
   {
-    "wtfox/jellybeans.nvim",
+    'wtfox/jellybeans.nvim',
     lazy = false,
     priority = 1000,
-    opts = {},
   },
-  { 'savq/melange-nvim' },
-  { 'phha/zenburn.nvim' },
+  { 'savq/melange-nvim', lazy = false, priority = 1000 },
+  { 'phha/zenburn.nvim', lazy = false, priority = 1000 },
   {
     'killitar/obscure.nvim',
     lazy = false,
     priority = 1000,
-    opts = {},
   },
   {
     'slugbyte/lackluster.nvim',
@@ -43,6 +40,11 @@ return {
   },
   { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
   {
+    'webhooked/kanso.nvim',
+    lazy = false,
+    priority = 1000,
+  },
+  {
     'zaldih/themery.nvim',
     lazy = false,
     cmd = { 'Themery' },
@@ -59,6 +61,7 @@ return {
           'bamboo',
           'lackluster',
           'NeoSolarized',
+          'kanso',
         },
       }
     end,
