@@ -1,5 +1,41 @@
 return {
   {
+    'azorng/goose.nvim',
+    config = function()
+      require('goose').setup {}
+    end,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      {
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          anti_conceal = { enabled = false },
+        },
+      },
+    },
+    opts = {
+      global = {
+        toggle = '<leader>gg', -- Open goose. Close if opened
+        open_input = '<leader>gi', -- Opens and focuses on input window on insert mode
+        open_input_new_session = '<leader>gI', -- Opens and focuses on input window on insert mode. Creates a new session
+        open_output = '<leader>go', -- Opens and focuses on output window
+        toggle_focus = '<leader>gt', -- Toggle focus between goose and last window
+        close = '<leader>gq', -- Close UI windows
+        toggle_fullscreen = '<leader>gf', -- Toggle between normal and fullscreen mode
+        select_session = '<leader>gs', -- Select and load a goose session
+        goose_mode_chat = '<leader>gmc', -- Set goose mode to `chat`. (Tool calling disabled. No editor context besides selections)
+        goose_mode_auto = '<leader>gma', -- Set goose mode to `auto`. (Default mode with full agent capabilities)
+        configure_provider = '<leader>gp', -- Quick provider and model switch from predefined list
+        diff_open = '<leader>gd', -- Opens a diff tab of a modified file since the last goose prompt
+        diff_next = '<leader>g]', -- Navigate to next file diff
+        diff_prev = '<leader>g[', -- Navigate to previous file diff
+        diff_close = '<leader>gc', -- Close diff view tab and return to normal editing
+        diff_revert_all = '<leader>gra', -- Revert all file changes since the last goose prompt
+        diff_revert_this = '<leader>grt', -- Revert current file changes since the last goose prompt
+      },
+    },
+  },
+  {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
@@ -34,7 +70,7 @@ return {
     opts = {
       strategies = {
         chat = {
-          adapter = 'anthropic',
+          adapter = 'gemini_pro',
         },
         inline = {
           adapter = 'copilot',
@@ -66,14 +102,18 @@ return {
             },
           })
         end,
-        gemini = function()
+        gemini_pro = function()
           return require('codecompanion.adapters').extend('gemini', {
+            name = 'gemini_pro',
             env = {
               api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/gemini_key.gpg 2>/dev/null',
             },
             schema = {
               model = {
-                default = 'gemini-2.5-pro-exp-03-25',
+                default = 'gemini-2.5-pro-preview-05-06',
+                choices = {
+                  'gemini-2.5-pro-preview-05-06',
+                },
               },
             },
           })
@@ -104,6 +144,7 @@ return {
                 default = 'Qwen/Qwen3-235B-A22B',
                 choices = {
                   'Qwen/Qwen3-235B-A22B',
+                  'mistralai/Mixtral-8x7B-Instruct-v0.1 ',
                 },
               },
             },
@@ -156,19 +197,30 @@ return {
               Bias towards not asking the user for help if you can find the answer yourself.
             </search_and_reading>
 
+            <planning_for_code_changes>
+              1. Keep the user request in mind, be concise and follow the request as close as possible.
+              2. Plan your changes in a way that it reduces the impact as much as possible, big changes should be confirmed by the user.
+              3. Do not assume that the user wants a change that's not clear on its request, always ask for confirmation if you see that the change has a big impact.
+              4. You will always cite and show the changes and request permission to call the replace_in_files tool.
+            </planning_for_code_changes>
+
             <making_code_changes>
               1. The user is likely just asking questions and not looking for edits. Only suggest edits if you are certain that the user is looking for edits.
-              2. You will only edit the places in code you need, you will NEVER edit the whole file, make changes part by part, pay extreme attention with your changes, you don't need to use search replace in one go, split your changes in smaller chunks.
+              2. You will make the changes in small chunks, keep the diff-fences small and manageable, if the diff has more than 20 lines, usually it is too big.
               3. You should first read the file to mimic the codestyle, preference and conventions of the codebase.
               4. You will always tell the user the changes you are going to make, and ask for confirmation before making them.
-              5. You will ALWAYS print the changes you are going to make in the format:
+              5. Play extra attention to indentation, line breaks and the replacement scope.
+
+              Use the diff-fenced format to organize your replacement. For example:
               
-              ```language:path/to/file
-              // ... existing code ...
-              {{ edit_1 }}
-              // ... existing code ...
-              {{ edit_2 }}
-              // ... existing code ...
+              ```
+              mathweb/flask/app.py
+              <<<<<<< SEARCH
+              from flask import Flask
+              =======
+              import math
+              from flask import Flask
+              >>>>>>> REPLACE
               ```
             </making_code_changes>
 
