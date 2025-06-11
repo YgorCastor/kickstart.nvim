@@ -33,6 +33,14 @@ return {
         diff_revert_all = '<leader>gra', -- Revert all file changes since the last goose prompt
         diff_revert_this = '<leader>grt', -- Revert current file changes since the last goose prompt
       },
+      providers = {
+        anthropic = {
+          'claude-sonnet-4-20250514',
+        },
+        google_gemini = {
+          'gemini-2.5-pro-preview-06-05',
+        },
+      },
     },
   },
   {
@@ -70,7 +78,7 @@ return {
     opts = {
       strategies = {
         chat = {
-          adapter = 'gemini_pro',
+          adapter = 'anthropic',
         },
         inline = {
           adapter = 'copilot',
@@ -83,7 +91,7 @@ return {
         mcphub = {
           callback = 'mcphub.extensions.codecompanion',
           opts = {
-            show_result_in_chat = false,
+            show_result_in_chat = true,
             make_vars = true,
             make_slash_commands = true,
           },
@@ -110,9 +118,9 @@ return {
             },
             schema = {
               model = {
-                default = 'gemini-2.5-pro-preview-05-06',
+                default = 'gemini-2.5-pro-preview-06-05',
                 choices = {
-                  'gemini-2.5-pro-preview-05-06',
+                  'gemini-2.5-pro-preview-06-05',
                 },
               },
             },
@@ -131,6 +139,22 @@ return {
           return require('codecompanion.adapters').extend('anthropic', {
             env = {
               api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/anthropic_key.gpg 2>/dev/null',
+            },
+          })
+        end,
+        claude_opus = function()
+          return require('codecompanion.adapters').extend('anthropic', {
+            name = 'claude_opus',
+            env = {
+              api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/anthropic_key.gpg 2>/dev/null',
+            },
+            schema = {
+              model = {
+                default = 'claude-opus-4-20250514',
+                choices = {
+                  'claude-opus-4-20250514',
+                },
+              },
             },
           })
         end,
@@ -163,6 +187,25 @@ return {
             <communication>
               When using markdown in assistant messages, use backticks to format file, directory, function, and class names. Use \\( and \\) for inline math, \\[ and \\] for block math.
             </communication>
+
+            You have two operation modes, planner and doer. Your default state is planner.
+
+            <operation_modes>
+              <planner>
+              In the planner mode your are a thinker, you design plans, ideas and suggestions for the USER.
+
+              * You may call tools, but never edit files
+              * You have a great knowledge in software engineering, architeture and system design
+              * Your suggestions will be well thought and will include detailed explanations
+              </planner>
+
+              <doer>
+              In the doer mode you are a coder, you implement the plans and ideas that you have designed in the planner mode.
+
+              * You will always ask for confirmation before making big changes in the codebase
+              * You will refer to the planner mode for guidance and suggestions
+              </doer>
+            </operation_modes>
 
             <knowledge_graph_memory_instructions>
               ## Memory Retrieval:
@@ -206,31 +249,14 @@ return {
 
             <making_code_changes>
               1. The user is likely just asking questions and not looking for edits. Only suggest edits if you are certain that the user is looking for edits.
-              2. You will make the changes in small chunks, keep the diff-fences small and manageable, if the diff has more than 20 lines, usually it is too big.
+              2. You will make the changes in small chunks, keep changes small and manageable.
               3. You should first read the file to mimic the codestyle, preference and conventions of the codebase.
               4. You will always tell the user the changes you are going to make, and ask for confirmation before making them.
               5. Play extra attention to indentation, line breaks and the replacement scope.
-
-              Use the diff-fenced format to organize your replacement. For example:
-              
-              ```
-              mathweb/flask/app.py
-              <<<<<<< SEARCH
-              from flask import Flask
-              =======
-              import math
-              from flask import Flask
-              >>>>>>> REPLACE
-              ```
             </making_code_changes>
 
-            Answer the user's request using the relevant tool(s), if they are available. Check that all the required parameters for each tool call are provided or can reasonably be inferred from context. IF there are no relevant tools or there are missing values for required parameters, ask the user to supply these values; otherwise proceed with the tool calls. If the user provides a specific value for a parameter (for example provided in quotes), make sure to use that value EXACTLY. DO NOT make up values for or ask about optional parameters. Carefully analyze descriptive terms in the request as they may indicate required parameter values that should be included even if not explicitly quoted.
-
-            You MUST use the following format when citing code regions or blocks:
-            ```12:15:app/components/Todo.tsx
-            // ... existing code ...
-            ```
-            This is the ONLY acceptable format for code citations. The format is ```startLine:endLine:filepath where startLine and endLine are line numbers.
+            Answer the user's request using the relevant tool(s), if they are available. Check that all the required parameters for each tool call are provided or can reasonably be inferred from context. IF there are no relevant tools or there are missing values for required parameters, ask the user to supply these values; otherwise proceed with the tool calls. If the user provides a specific value for a parameter (for example provided in quotes), make sure to use that value EXACTLY. DO NOT make up values for or ask about optional parameters. Carefully analyze descriptive terms 
+            in the request as they may indicate required parameter values that should be included even if not explicitly quoted.
 
             Before executing a tool/function, you will check if this tool needs to be executed through MCP, if so, you follow the Mcphub flow to execute the tool.
           ]]
@@ -246,7 +272,8 @@ return {
     build = 'bundled_build.lua',
     config = function()
       require('mcphub').setup {
-        auto_approve = true,
+        auto_approve = false,
+        use_bundled_binary = true,
         config = vim.fn.expand '~/.mcpservers.json',
       }
     end,

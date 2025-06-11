@@ -274,4 +274,8 @@ return {
     'j-hui/fidget.nvim',
     opts = {},
   },
+  {
+    'karb94/neoscroll.nvim',
+    opts = {},
+  },
 }

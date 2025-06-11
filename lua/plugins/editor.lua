@@ -479,4 +479,13 @@ return {
       { '<leader>oc', '<cmd>OverseerClearCache<cr>', desc = 'Clear cache' },
     },
   },
+  {
+    'tris203/precognition.nvim',
+    event = 'VeryLazy',
+    opts = {
+      disabled_fts = {
+        'startify',
+      },
+    },
+  },
 }
