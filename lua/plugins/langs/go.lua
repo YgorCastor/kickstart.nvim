@@ -81,10 +81,12 @@ return {
   },
   {
     'leoluz/nvim-dap-go',
+    lazy = true,
     opts = {},
   },
   {
     'fredrikaverpil/neotest-golang',
+    lazy = true,
   },
   {
     'nvimtools/none-ls.nvim',
@@ -116,6 +118,7 @@ return {
   },
   {
     'mfussenegger/nvim-dap',
+    lazy = true,
     optional = true,
     dependencies = {
       {

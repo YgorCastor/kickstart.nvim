@@ -85,17 +85,6 @@ return {
     end,
   },
   {
-    's1n7ax/nvim-terminal',
-    lazy = true,
-    event = 'VeryLazy',
-    config = function()
-      vim.o.hidden = true
-      require('nvim-terminal').setup {
-        toggle_keymap = '<leader>tt',
-      }
-    end,
-  },
-  {
     'kdheepak/lazygit.nvim',
     lazy = true,
     cmd = {

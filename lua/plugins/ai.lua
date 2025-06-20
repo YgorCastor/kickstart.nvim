@@ -38,7 +38,7 @@ return {
           'claude-sonnet-4-20250514',
         },
         google_gemini = {
-          'gemini-2.5-pro-preview-06-05',
+          'gemini-2.5-pro',
         },
       },
     },
@@ -63,6 +63,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
+    tag = 'v16.3.0',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -91,7 +92,7 @@ return {
         mcphub = {
           callback = 'mcphub.extensions.codecompanion',
           opts = {
-            show_result_in_chat = true,
+            show_result_in_chat = false,
             make_vars = true,
             make_slash_commands = true,
           },
@@ -118,9 +119,9 @@ return {
             },
             schema = {
               model = {
-                default = 'gemini-2.5-pro-preview-06-05',
+                default = 'gemini-2.5-pro',
                 choices = {
-                  'gemini-2.5-pro-preview-06-05',
+                  'gemini-2.5-pro',
                 },
               },
             },

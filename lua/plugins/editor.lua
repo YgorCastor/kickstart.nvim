@@ -483,8 +483,25 @@ return {
     'tris203/precognition.nvim',
     event = 'VeryLazy',
     opts = {
+      startVisible = false,
+      showBlankVirtLine = false,
       disabled_fts = {
         'startify',
+      },
+    },
+  },
+  {
+    'nvzone/floaterm',
+    dependencies = 'nvzone/volt',
+    opts = {},
+    cmd = 'FloatermToggle',
+    keys = {
+      {
+        '<leader>ft',
+        function()
+          require('floaterm').toggle()
+        end,
+        desc = 'Toggle Floaterm',
       },
     },
   },
