@@ -63,7 +63,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
-    tag = 'v16.3.0',
+    tag = 'v17.5.0',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -208,9 +208,10 @@ return {
               </doer>
             </operation_modes>
 
-            <knowledge_graph_memory_instructions>
+            <memory_instructions>
               ## Memory Retrieval:
                 Begin the interaction with "Remembering..."
+                You will use the memory-bank tool to store and retrieve memories
                 Retrieve all relevant information about the specific coding project(s) being discussed from your memory.
 
               ### Memory (Coding Project Focus):
@@ -230,7 +231,12 @@ return {
                 a) Create specific entities for the project itself, team members, key technologies (languages, frameworks, databases), significant components, external services, or major milestones/releases.
                 b) Establish connections (relations) between these entities (e.g., Project_Alpha uses_language Python, Jane_Doe is_role Lead_Developer on_project Project_Alpha, Project_Alpha integrates_with Stripe_API).
                 c) Store the specific facts about these entities and their relationships as observations within your memory.
-            </knowledge_graph_memory_instructions>
+            </memory_instructions>
+
+            <file_reading>
+              For file reading and writing give preference to the Desktop Commander MCP Tool
+              Always check if you are working in the correct directory, you can use pwd or ask neovim the root filepath for the project
+            </file_reading>
 
             <search_and_reading>
               If you are unsure about the answer to the USER's request or how to satiate their request, you should gather more information. This can be done with additional tool calls, asking clarifying questions, etc...
@@ -245,7 +251,6 @@ return {
               1. Keep the user request in mind, be concise and follow the request as close as possible.
               2. Plan your changes in a way that it reduces the impact as much as possible, big changes should be confirmed by the user.
               3. Do not assume that the user wants a change that's not clear on its request, always ask for confirmation if you see that the change has a big impact.
-              4. You will always cite and show the changes and request permission to call the replace_in_files tool.
             </planning_for_code_changes>
 
             <making_code_changes>
@@ -259,7 +264,7 @@ return {
             Answer the user's request using the relevant tool(s), if they are available. Check that all the required parameters for each tool call are provided or can reasonably be inferred from context. IF there are no relevant tools or there are missing values for required parameters, ask the user to supply these values; otherwise proceed with the tool calls. If the user provides a specific value for a parameter (for example provided in quotes), make sure to use that value EXACTLY. DO NOT make up values for or ask about optional parameters. Carefully analyze descriptive terms 
             in the request as they may indicate required parameter values that should be included even if not explicitly quoted.
 
-            Before executing a tool/function, you will check if this tool needs to be executed through MCP, if so, you follow the Mcphub flow to execute the tool.
+            Before executing a tool/function, you will check if this tool needs to be executed through MCP, if so, you follow the MCPhub flow to execute the tool.
           ]]
         end,
       },
