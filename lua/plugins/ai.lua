@@ -19,7 +19,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
-    tag = 'v16.3.0',
+    tag = 'v17.8.0',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -58,27 +58,11 @@ return {
         openai = function()
           return require('codecompanion.adapters').extend('openai', {
             env = {
-              api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/openai_key.gpg 2>/dev/null',
+              api_key = 'cmd:gpg --quiet --use-agent --decrypt ~/.config/llms/openai_key.gpg 2>/dev/null',
             },
             schema = {
               model = {
                 default = 'o3-mini-2025-01-31',
-              },
-            },
-          })
-        end,
-        gemini_pro = function()
-          return require('codecompanion.adapters').extend('gemini', {
-            name = 'gemini_pro',
-            env = {
-              api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/gemini_key.gpg 2>/dev/null',
-            },
-            schema = {
-              model = {
-                default = 'gemini-2.5-pro',
-                choices = {
-                  'gemini-2.5-pro',
-                },
               },
             },
           })
@@ -95,14 +79,14 @@ return {
         anthropic = function()
           return require('codecompanion.adapters').extend('anthropic', {
             env = {
-              api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/anthropic_key.gpg 2>/dev/null',
+              api_key = 'cmd:gpg --quiet --use-agent --decrypt ~/.config/llms/anthropic_key.gpg 2>/dev/null',
             },
           })
         end,
         huggingface = function()
           return require('codecompanion.adapters').extend('huggingface', {
             env = {
-              api_key = 'cmd:gpg --batch --quiet --pinentry-mode loopback --decrypt ~/.config/llms/huggingface_key.gpg 2>/dev/null',
+              api_key = 'cmd:gpg --quiet --use-agent --decrypt ~/.config/llms/huggingface_key.gpg 2>/dev/null',
             },
             schema = {
               model = {
@@ -175,7 +159,8 @@ return {
 
             <file_reading>
               For file reading and writing give preference to the Desktop Commander MCP Tool
-              Always check if you are working in the correct directory, you can use pwd or ask neovim the root filepath for the project
+              When using the desktop commander, it needs a full path to the files, you should always check the correct path before changing a file,
+              you can use the neovim tool to know which path to work with.
             </file_reading>
 
             <search_and_reading>
