@@ -420,6 +420,7 @@ return {
     cmd = { 'WorkspacesAdd', 'WorkspacesRemove', 'WorkspacesList' },
     keys = {
       { '<leader>wa', '<cmd>WorkspacesAdd<cr>', desc = 'Add Workspace' },
+      { '<leader>wr', '<cmd>WorkspacesRemove<cr>', desc = 'Add Workspace' },
       { '<leader>wl', '<cmd>WorkspacesList<cr>', desc = 'List Workspaces' },
     },
     config = function()
@@ -491,18 +492,37 @@ return {
     },
   },
   {
-    'nvzone/floaterm',
-    dependencies = 'nvzone/volt',
-    opts = {},
-    cmd = 'FloatermToggle',
+    'nvim-focus/focus.nvim',
+    version = '*',
+    config = function()
+      require('focus').setup()
+    end,
     keys = {
-      {
-        '<leader>ft',
-        function()
-          require('floaterm').toggle()
-        end,
-        desc = 'Toggle Floaterm',
-      },
+      { '<leader>su', '<cmd>FocusSplitUp<cr>', desc = 'Split Up' },
+      { '<leader>sj', '<cmd>FocusSplitDown<cr>', desc = 'Split Down' },
+      { '<leader>sh', '<cmd>FocusSplitLeft<cr>', desc = 'Split Left' },
+      { '<leader>sl', '<cmd>FocusSplitRight<cr>', desc = 'Split Right' },
+      { '<leader>sg', '<cmd>FocusSplitNicely<cr>', desc = 'Split Based on Golden Ratio' },
+      { '<leader>ntd', '<cmd>FocusSplitDown cmd term<cr>', desc = 'Split Term Down' },
+      { '<leader>fm', '<cmd>FocusMaximise<cr>', desc = 'Maximise Current Focus' },
+    },
+  },
+  {
+    's1n7ax/nvim-terminal',
+    event = 'VeryLazy',
+    config = function()
+      vim.o.hidden = true
+      require('nvim-terminal').setup {
+        disable_default_keymaps = true,
+      }
+    end,
+    keys = {
+      { '<leader>tt', ':lua NTGlobal["terminal"]:toggle()<cr>', desc = 'Toggle Terminal' },
+      { '<leader>t1', ':lua NTGlobal["terminal"]:open(1)<cr>', desc = 'Toggle Terminal 1' },
+      { '<leader>t2', ':lua NTGlobal["terminal"]:open(2)<cr>', desc = 'Toggle Terminal 2' },
+      { '<leader>t3', ':lua NTGlobal["terminal"]:open(3)<cr>', desc = 'Toggle Terminal 3' },
+      { '<leader>t4', ':lua NTGlobal["terminal"]:open(4)<cr>', desc = 'Toggle Terminal 4' },
+      { '<leader>t5', ':lua NTGlobal["terminal"]:open(5)<cr>', desc = 'Toggle Terminal 5' },
     },
   },
 }
