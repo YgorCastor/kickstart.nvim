@@ -3,11 +3,6 @@ return {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {
-        copilot_model = 'gemini-2.5-pro',
-      }
-    end,
     opts = {
       suggestion = { enabled = false },
       panel = { enabled = false },
@@ -19,7 +14,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
-    tag = 'v17.8.0',
+    tag = 'v17.9.0',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -72,6 +67,21 @@ return {
             schema = {
               model = {
                 default = 'gemini-2.5-pro',
+              },
+            },
+          })
+        end,
+        openrouter = function()
+          return require('codecompanion.adapters').extend('openai_compatible', {
+            env = {
+              url = 'https://openrouter.ai/api',
+              api_key = 'cmd:gpg --quiet --use-agent --decrypt ~/.config/llms/openrouter_key.gpg 2>/dev/null',
+              chat_url = '/v1/chat/completions',
+              models_endpoint = '/v1/models',
+            },
+            schema = {
+              model = {
+                default = 'moonshotai/kimi-k2',
               },
             },
           })
@@ -156,12 +166,6 @@ return {
                 b) Establish connections (relations) between these entities (e.g., Project_Alpha uses_language Python, Jane_Doe is_role Lead_Developer on_project Project_Alpha, Project_Alpha integrates_with Stripe_API).
                 c) Store the specific facts about these entities and their relationships as observations within your memory.
             </memory_instructions>
-
-            <file_reading>
-              For file reading and writing give preference to the Desktop Commander MCP Tool
-              When using the desktop commander, it needs a full path to the files, you should always check the correct path before changing a file,
-              you can use the neovim tool to know which path to work with.
-            </file_reading>
 
             <search_and_reading>
               If you are unsure about the answer to the USER's request or how to satiate their request, you should gather more information. This can be done with additional tool calls, asking clarifying questions, etc...
