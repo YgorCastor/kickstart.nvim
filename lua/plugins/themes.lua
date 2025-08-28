@@ -1,17 +1,11 @@
 return {
   { 'kdheepak/monochrome.nvim', lazy = false, priority = 1001 },
   {
-    '0xstepit/flow.nvim',
-    lazy = false,
-    priority = 1000,
-  },
-  {
     'wtfox/jellybeans.nvim',
     lazy = false,
     priority = 1000,
   },
   { 'savq/melange-nvim', lazy = false, priority = 1000 },
-  { 'phha/zenburn.nvim', lazy = false, priority = 1000 },
   {
     'killitar/obscure.nvim',
     lazy = false,
@@ -45,6 +39,11 @@ return {
     priority = 1000,
   },
   {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    priority = 1000,
+  },
+  {
     'zaldih/themery.nvim',
     lazy = false,
     cmd = { 'Themery' },
@@ -52,16 +51,15 @@ return {
       require('themery').setup {
         themes = {
           'catppuccin',
-          'flow',
           'jellybeans',
           'monochrome',
           'melange',
-          'zenburn',
           'obscure',
           'bamboo',
           'lackluster',
           'NeoSolarized',
           'kanso',
+          'rose-pine',
         },
       }
     end,
