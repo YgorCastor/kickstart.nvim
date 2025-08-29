@@ -65,3 +65,6 @@ vim.g.markdown_recommended_style = 0
 
 -- Do not fold by default
 opt.foldenable = false
+
+-- Enable filetype detection (required for Neovim 0.11.3)
+vim.cmd.filetype('plugin indent on')
