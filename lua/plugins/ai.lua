@@ -3,12 +3,23 @@ return {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
+    config = function()
+      vim.g.copilot_settings = { selectedCompletionModel = 'gpt-5-copilot' }
+    end,
     opts = {
       suggestion = { enabled = false },
       panel = { enabled = false },
       filetypes = {
         markdown = true,
         help = true,
+      },
+    },
+  },
+  {
+    'neovim/nvim-lspconfig',
+    opts = {
+      servers = {
+        copilot = {},
       },
     },
   },
