@@ -76,77 +76,6 @@ return {
     },
   },
   {
-    'nvim-telescope/telescope.nvim',
-    event = 'VimEnter',
-    branch = '0.1.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        cond = function()
-          return vim.fn.executable 'make' == 1
-        end,
-      },
-      { 'nvim-telescope/telescope-ui-select.nvim' },
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
-    },
-    config = function()
-      require('telescope').setup {
-        extensions = {
-          ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
-          },
-        },
-      }
-
-      -- Enable Telescope extensions if they are installed
-      pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
-
-      -- See `:help telescope.builtin`
-      local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
-      vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
-      vim.keymap.set('n', '<leader>fr', builtin.oldfiles, { desc = '[F]ind [R]ecent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader>fb', function()
-        builtin.buffers {
-          attach_mappings = function(prompt_bufnr, map)
-            map('i', '<c-d>', function(bufnr)
-              require('telescope.actions').delete_buffer(bufnr)
-            end)
-            return true
-          end,
-        }
-      end, { desc = '[F]ind [B]uffers (Ctrl-d to delete)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.live_grep, { desc = 'Search in all files' })
-
-      -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
-
-      -- It's also possible to pass additional configuration options.
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
-        }
-      end, { desc = '[S]earch [/] in Open Files' })
-
-      -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
-    end,
-  },
-  {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
@@ -248,6 +177,47 @@ return {
           require('flash').toggle()
         end,
         desc = 'Toggle Flash Search',
+      },
+    },
+  },
+  {
+    'folke/flash.nvim',
+    optional = true,
+    specs = {
+      {
+        'folke/snacks.nvim',
+        opts = {
+          picker = {
+            win = {
+              input = {
+                keys = {
+                  ['<a-s>'] = { 'flash', mode = { 'n', 'i' } },
+                  ['s'] = { 'flash' },
+                },
+              },
+            },
+            actions = {
+              flash = function(picker)
+                require('flash').jump {
+                  pattern = '^',
+                  label = { after = { 0, 0 } },
+                  search = {
+                    mode = 'search',
+                    exclude = {
+                      function(win)
+                        return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'snacks_picker_list'
+                      end,
+                    },
+                  },
+                  action = function(match)
+                    local idx = picker.list:row2idx(match.pos[1])
+                    picker.list:_move(idx, true, true)
+                  end,
+                }
+              end,
+            },
+          },
+        },
       },
     },
   },
@@ -523,6 +493,97 @@ return {
       { '<leader>t3', ':lua NTGlobal["terminal"]:open(3)<cr>', desc = 'Toggle Terminal 3' },
       { '<leader>t4', ':lua NTGlobal["terminal"]:open(4)<cr>', desc = 'Toggle Terminal 4' },
       { '<leader>t5', ':lua NTGlobal["terminal"]:open(5)<cr>', desc = 'Toggle Terminal 5' },
+    },
+  },
+  {
+    'folke/snacks.nvim',
+    opts = {
+      picker = {
+        win = {
+          input = {
+            keys = {
+              ['<a-c>'] = {
+                'toggle_cwd',
+                mode = { 'n', 'i' },
+              },
+            },
+          },
+        },
+      },
+    },
+    -- stylua: ignore
+    keys = {
+      -- find
+      { "<leader>sff", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+      { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+      { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Files (git-files)" },
+      { "<leader>fR", function() Snacks.picker.recent({ filter = { cwd = true }}) end, desc = "Recent (cwd)" },
+      { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+      -- search
+      { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+      { "<space><space>", function() Snacks.picker.grep() end, desc = "Grep" },
+      -- ui
+      { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
+    },
+  },
+  {
+    'folke/snacks.nvim',
+    opts = function(_, opts)
+      return vim.tbl_deep_extend('force', opts or {}, {
+        picker = {
+          actions = {
+            trouble_open = function(...)
+              return require('trouble.sources.snacks').actions.trouble_open.action(...)
+            end,
+          },
+          win = {
+            input = {
+              keys = {
+                ['<a-t>'] = {
+                  'trouble_open',
+                  mode = { 'n', 'i' },
+                },
+              },
+            },
+          },
+        },
+      })
+    end,
+  },
+  {
+    'folke/snacks.nvim',
+    opts = {
+      picker = {
+        win = {
+          input = {
+            keys = {
+              ['<a-s>'] = { 'flash', mode = { 'n', 'i' } },
+              ['s'] = { 'flash' },
+            },
+          },
+        },
+        actions = {
+          flash = function(picker)
+            require('flash').jump {
+              pattern = '^',
+              label = { after = { 0, 0 } },
+              search = {
+                mode = 'search',
+                exclude = {
+                  function(win)
+                    return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'snacks_picker_list'
+                  end,
+                },
+              },
+              action = function(match)
+                local idx = picker.list:row2idx(match.pos[1])
+                picker.list:_move(idx, true, true)
+              end,
+            }
+          end,
+        },
+      },
     },
   },
 }

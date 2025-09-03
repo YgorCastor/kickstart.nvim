@@ -134,9 +134,6 @@ return {
     'olimorris/persisted.nvim',
     lazy = true,
     cmd = { 'SessionLoad', 'SessionSave', 'SessionDelete' },
-    keys = {
-      { '<leader>ps', '<cmd>Telescope persisted<cr>', desc = 'Sessions' },
-    },
     config = function()
       require('persisted').setup {
         save_dir = vim.fn.expand(vim.fn.stdpath 'data' .. '/sessions/'),
@@ -156,9 +153,6 @@ return {
           },
         },
       }
-
-      -- Load the telescope extension
-      require('telescope').load_extension 'persisted'
     end,
   },
   {
