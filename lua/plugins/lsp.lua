@@ -139,7 +139,6 @@ return {
     event = 'LazyFile',
     dependencies = {
       'mason.nvim',
-      { 'williamboman/mason-lspconfig.nvim', config = function() end },
     },
     opts = function()
       ---@class PluginLspOpts
@@ -266,61 +265,21 @@ return {
         end,
       })
 
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
-
       local servers = opts.servers
+      local mlsp = require 'mason-lspconfig'
 
-      local function setup(server)
-        local server_opts = vim.tbl_deep_extend('force', {
-          capabilities = vim.deepcopy(capabilities),
-        }, servers[server] or {})
-        if server_opts.enabled == false then
-          return
-        end
-
-        if opts.setup[server] then
-          if opts.setup[server](server, server_opts) then
-            return
-          end
-        elseif opts.setup['*'] then
-          if opts.setup['*'](server, server_opts) then
-            return
-          end
-        end
-        require('lspconfig')[server].setup(server_opts)
-      end
-
-      -- get all the servers that are available through mason-lspconfig
-      local have_mason, mlsp = pcall(require, 'mason-lspconfig')
-      local all_mslp_servers = {}
-
-      if have_mason then
-        all_mslp_servers = vim.tbl_keys(require('mason-lspconfig').get_mappings().lspconfig_to_package)
-      end
-
-      local ensure_installed = {} ---@type string[]
+      ---@type string[]
+      local ensure_installed = {}
 
       for server, server_opts in pairs(servers) do
         if server_opts then
-          server_opts = server_opts == true and {} or server_opts
-          if server_opts.enabled ~= false then
-            if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-              setup(server)
-            else
-              ensure_installed[#ensure_installed + 1] = server
-            end
-          end
+          vim.lsp.config(server, server_opts)
         end
       end
 
-      if have_mason then
-        mlsp.setup {
-          ensure_installed = vim.tbl_deep_extend('force', ensure_installed, Helpers.opts('mason-lspconfig.nvim').ensure_installed or {}),
-          automatic_installation = false,
-          handlers = { setup },
-        }
-      end
+      mlsp.setup {
+        ensure_installed = vim.tbl_deep_extend('force', ensure_installed, Helpers.opts('mason-lspconfig.nvim').ensure_installed or {}),
+      }
     end,
   },
   {
