@@ -25,7 +25,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
-    tag = 'v17.18.0',
+    tag = 'v17.19.1',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',

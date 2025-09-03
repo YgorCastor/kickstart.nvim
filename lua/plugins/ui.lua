@@ -195,14 +195,8 @@ return {
       require('codesnap').setup {
         has_breadcrumbs = false,
         watermark = '',
-        save_path = '~/Pictures',
+        save_path = '~/Pictures/CodeSnap',
       }
-    end,
-  },
-  {
-    'VidocqH/lsp-lens.nvim',
-    config = function()
-      require('lsp-lens').setup {}
     end,
   },
   {
@@ -266,5 +260,17 @@ return {
   {
     'karb94/neoscroll.nvim',
     opts = {},
+  },
+  {
+    'suliatis/Jumppack.nvim',
+    config = true,
+  },
+  {
+    'oribarilan/lensline.nvim',
+    tag = '1.1.0',
+    event = 'LspAttach',
+    config = function()
+      require('lensline').setup()
+    end,
   },
 }
