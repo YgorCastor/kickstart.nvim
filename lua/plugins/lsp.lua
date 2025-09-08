@@ -140,6 +140,46 @@ return {
     dependencies = {
       'mason.nvim',
     },
+    keys = {
+      {
+        'gd',
+        function()
+          Snacks.picker.lsp_definitions()
+        end,
+        desc = 'Go to Definition',
+      },
+      {
+        'gr',
+        function()
+          Snacks.picker.lsp_references()
+        end,
+        desc = 'Go to References',
+      },
+      {
+        'gI',
+        function()
+          Snacks.picker.lsp_implementations()
+        end,
+        desc = 'Go to Implementation',
+      },
+      {
+        '<leader>D',
+        function()
+          Snacks.picker.lsp_type_definitions()
+        end,
+        desc = 'Type Definition',
+      },
+      { '<leader>rn', vim.lsp.buf.rename, desc = 'Rename' },
+      { '<leader>ca', vim.lsp.buf.code_action, mode = { 'n', 'x' }, desc = 'Code Action' },
+      { 'gD', vim.lsp.buf.declaration, desc = 'Go to Declaration' },
+      {
+        '<leader>th',
+        function()
+          vim.lsp.inlay_hint.toggle()
+        end,
+        desc = 'Toggle Inlay Hints',
+      },
+    },
     opts = function()
       ---@class PluginLspOpts
       local ret = {
@@ -211,27 +251,6 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
-          local map = function(keys, func, desc, mode)
-            mode = mode or 'n'
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
-          end
-
-          map('gd', function()
-            Snacks.picker.lsp_definitions()
-          end, '[G]oto [D]efinition')
-          map('gr', function()
-            Snacks.picker.lsp_references()
-          end, '[G]oto [R]eferences')
-          map('gI', function()
-            Snacks.picker.lsp_implementations()
-          end, '[G]oto [I]mplementation')
-          map('<leader>D', function()
-            Snacks.picker.lsp_type_definitions()
-          end, 'Type [D]efinition')
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
           local client = vim.lsp.get_client_by_id(event.data.client_id)
 
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
@@ -256,12 +275,6 @@ return {
               end,
             })
           end
-
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
-          end
         end,
       })
 
@@ -275,6 +288,8 @@ return {
         if server_opts then
           vim.lsp.config(server, server_opts)
         end
+
+        ensure_installed[#ensure_installed + 1] = server
       end
 
       mlsp.setup {

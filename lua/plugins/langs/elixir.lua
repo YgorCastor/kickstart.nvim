@@ -60,9 +60,7 @@ return {
     'neovim/nvim-lspconfig',
     opts = {
       servers = {
-        expert = {
-          root_markers = { 'mix.exs', '.git' },
-        },
+        expert = {},
       },
     },
   },
