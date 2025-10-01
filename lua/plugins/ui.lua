@@ -1,44 +1,19 @@
 return {
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    version = '*',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons',
-      'MunifTanjim/nui.nvim',
-    },
-    cmd = 'Neotree',
+    'A7Lavinraj/fyler.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = { icon_provider = 'nvim_web_devicons' },
     keys = {
       {
         '<leader>e',
         function()
-          local window_exists = false
-          for _, win in pairs(vim.api.nvim_list_wins()) do
-            local buf = vim.api.nvim_win_get_buf(win)
-            local buf_name = vim.api.nvim_buf_get_name(buf)
-            if buf_name:match 'neo%-tree filesystem' then
-              window_exists = true
-              break
-            end
-          end
-
-          if window_exists then
-            vim.cmd 'Neotree close'
-          else
-            vim.cmd 'Neotree reveal'
-          end
+          local fyler = require 'fyler'
+          fyler.toggle {
+            kind = 'split_left_most', -- (Optional) Use custom window layout
+          }
         end,
-        desc = 'NeoTree toggle',
+        desc = 'Fyler toggle',
         silent = true,
-      },
-    },
-    opts = {
-      filesystem = {
-        window = {
-          mappings = {
-            ['\\'] = 'close_window',
-          },
-        },
       },
     },
   },
@@ -249,10 +224,6 @@ return {
   },
   {
     'j-hui/fidget.nvim',
-    opts = {},
-  },
-  {
-    'karb94/neoscroll.nvim',
     opts = {},
   },
   {
